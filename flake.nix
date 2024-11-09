@@ -20,9 +20,16 @@
 
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = with pkgs; [ nodejs nodePackages.pnpm libuuid ];
+          packages = with pkgs; [ nodejs nodePackages.pnpm ];
           env = {
-            LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ pkgs.libuuid ];
+            LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+              pkgs.libuuid
+              pkgs.pixman
+              pkgs.cairo
+              pkgs.libpng
+              pkgs.pango
+              pkgs.gobject-introspection-unwrapped
+            ];
           };
         };
       });

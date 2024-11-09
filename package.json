@@ -4,7 +4,8 @@
 	"scripts": {
 		"start": "tsx scripts/run.ts",
 		"dev": "tsx watch scripts/run.ts",
-		"build": "pnpx bun scripts/build.ts",
+		"bundle": "pnpx bun scripts/bundle.ts",
+		"transpile": "pnpx bun scripts/transpile.ts",
 		"test": "node --import tsx --test ./tests/integration.ts",
 		"test:dev": "node --import tsx --test --watch ./tests/integration.ts",
 		"deploy": "vercel deploy"
@@ -18,7 +19,8 @@
 		"firebase": "^11.0.1",
 		"hono": "^4.5.7",
 		"mock-aws-s3": "^4.0.2",
-		"nock": "^13.5.5"
+		"nock": "^13.5.5",
+		"seedrandom": "^3.0.5"
 	},
 	"devDependencies": {
 		"@hyrious/esbuild-plugin-commonjs": "^0.2.4",

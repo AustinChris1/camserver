@@ -35,6 +35,9 @@ importers:
       nock:
         specifier: ^13.5.5
         version: 13.5.5
+      seedrandom:
+        specifier: ^3.0.5
+        version: 3.0.5
     devDependencies:
       '@hyrious/esbuild-plugin-commonjs':
         specifier: ^0.2.4
