@@ -1,6 +1,6 @@
 import { logger } from "hono/logger";
 import { Hono } from "hono";
-import { router as imageProcessingRouter } from "../modules/image-processing";
+import { router as imageProcessingRouter } from "./modules/image-processing";
 
 export const app = new Hono()
 	.use(logger())

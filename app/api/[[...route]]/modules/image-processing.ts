@@ -1,6 +1,6 @@
 import "../../config/face-api";
 import * as faceapi from "@vladmandic/face-api";
-import { db } from "../../config/firebase";
+import { db } from "../config/firebase";
 import { child, get, ref } from "firebase/database";
 import { loadImage } from "canvas";
 import { Hono } from "hono";
