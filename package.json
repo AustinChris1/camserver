@@ -6,7 +6,8 @@
 		"dev": "tsx watch scripts/run.ts",
 		"build": "pnpx bun scripts/build.ts",
 		"test": "node --import tsx --test ./tests/integration.ts",
-		"test:dev": "node --import tsx --test --watch ./tests/integration.ts"
+		"test:dev": "node --import tsx --test --watch ./tests/integration.ts",
+		"deploy": "vercel deploy"
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.12.1",
@@ -24,6 +25,7 @@
 		"@types/bun": "^1.1.13",
 		"@types/node": "^20.11.17",
 		"esbuild": "^0.24.0",
-		"tsx": "^4.7.1"
+		"tsx": "^4.7.1",
+		"vercel": "^37.14.0"
 	}
 }
