@@ -22,6 +22,7 @@ const labels = await getLabels();
 const loadModels = async () => {
   const modelPath = "https://ruisantosdotme.github.io/face-api.js/weights/";
   try {
+    console.log("Loading face-api models...");
     await Promise.all([
       faceapi.nets.faceRecognitionNet.loadFromUri(modelPath),
       faceapi.nets.faceLandmark68Net.loadFromUri(modelPath),
