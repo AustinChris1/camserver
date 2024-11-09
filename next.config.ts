@@ -6,7 +6,16 @@ const nextConfig: NextConfig = {
 	experimental: {
 		turbo: {
 			rules: {
-				"*.html": ["raw-loader"],
+				// "*.html": ["raw-loader"],
+				// ".html": ["raw-loader"],
+				// "*.html": ["svg-inline-loader"],
+				// ".html": ["svg-inline-loader"],
+				// "*.html": ["file-loader"],
+				// ".html": ["file-loader"],
+				// "*.html": ["html-loader"],
+				// ".html": ["html-loader"],
+				"*.html": ["@svgr/webpack"],
+				// ".html": ["@svgr/webpack"],
 			},
 		},
 	},

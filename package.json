@@ -10,17 +10,20 @@
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.12.1",
+		"@svgr/webpack": "^8.1.0",
 		"@tensorflow/tfjs-node": "^4.22.0",
 		"@vladmandic/face-api": "^1.7.14",
 		"aws-sdk": "^2.1692.0",
 		"canvas": "^2.11.2",
 		"firebase": "^11.0.1",
 		"hono": "^4.5.7",
+		"html-loader": "^5.1.0",
 		"mock-aws-s3": "^4.0.2",
 		"next": "15.0.3",
 		"nock": "^13.5.5",
 		"react": "19.0.0-rc-66855b96-20241106",
-		"react-dom": "19.0.0-rc-66855b96-20241106"
+		"react-dom": "19.0.0-rc-66855b96-20241106",
+		"svg-inline-loader": "^0.8.2"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
