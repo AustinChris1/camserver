@@ -4,7 +4,7 @@ RUN apk add --no-cache gcompat
 WORKDIR /app
 
 COPY . .
-
+RUN corepack enable && corepack prepare --activate pnpm@latest
 RUN pnpm install
 EXPOSE 3000
 
