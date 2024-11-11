@@ -4,6 +4,7 @@ import { db } from "../config/firebase";
 import { child, get, ref } from "firebase/database";
 import { loadImage } from "canvas";
 import { Hono } from "hono";
+import FormData from "form-data";  // Import the FormData polyfill
 
 const BOTtoken = "8157441188:AAEL8YYm7fUbGPKSdmnxQADSj11hTfKAPJg";
 const CHAT_ID = "7683328159";
@@ -40,7 +41,7 @@ const loadLabeledImages = async () => {
   const descriptions = await Promise.all(
     labels.map(async (label) => {
       const labeledImage = await loadImage(
-        `https://firebasestorage.googleapis.com/v0/b/bodycam1001.appspot.com/o/images%2F${label}.jpg?alt=media`,
+        `https://firebasestorage.googleapis.com/v0/b/bodycam1001.appspot.com/o/images%2F${label}.jpg?alt=media`
       );
 
       if (!labeledImage || labeledImage.width === 0 || labeledImage.height === 0) {
@@ -57,7 +58,7 @@ const loadLabeledImages = async () => {
         return null;
       }
       return new faceapi.LabeledFaceDescriptors(label, [detections.descriptor]);
-    }),
+    })
   );
 
   return descriptions.filter((d) => !!d);
@@ -92,7 +93,16 @@ async function sendToTelegram(photoBuffer: Buffer, label: string): Promise<void>
 }
 
 export const router = new Hono().post("/stream", async (c) => {
-  const { image: rawImage } = await c.req.parseBody();
+  // Retrieve the raw body data
+  const rawBody = await c.req.body();
+
+  // You might want to use a custom multipart parser here
+  const formData = new FormData();
+  formData.append("image", rawBody, "photo.jpg");
+
+  // Handle the image data as FormData
+  const rawImage = formData.get("image");
+
   if (!(rawImage instanceof File)) {
     return c.json({ error: "Invalid data" }, 400);
   }

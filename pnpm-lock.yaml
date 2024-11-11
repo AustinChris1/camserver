@@ -26,6 +26,9 @@ importers:
       firebase:
         specifier: ^11.0.1
         version: 11.0.1
+      form-data:
+        specifier: ^4.0.1
+        version: 4.0.1
       hono:
         specifier: ^4.5.7
         version: 4.6.9
