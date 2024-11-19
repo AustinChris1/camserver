@@ -71,35 +71,54 @@ const loadLabeledImages = async () => {
 const labeledFaceDescriptors = await loadLabeledImages();
 
 // Function to send image to Telegram
-async function sendToTelegram(photoBuffer: Buffer, label: string): Promise<void> {
-  const url = `https://api.telegram.org/bot${BOTtoken}/sendPhoto`;
-  const formData = new FormData();
-
-  formData.append("chat_id", CHAT_ID);
-  formData.append("caption", `Detected: ${label}`);
-  formData.append("photo", new Blob([photoBuffer], { type: "image/jpeg" }), "detected.jpg");
-
+async function sendToTelegram(photoBuffer: Buffer, label: string, location: string, latitude: number, longitude: number): Promise<void> {
   try {
-    const response = await fetch(url, {
+    // Send location message
+    const locationUrl = `https://api.telegram.org/bot${BOTtoken}/sendLocation`;
+    const locationResponse = await fetch(locationUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        latitude: latitude,
+        longitude: longitude,
+      }),
+    });
+
+    const locationData = await locationResponse.json();
+    if (!locationData.ok) {
+      throw new Error(`Failed to send location: ${locationData.description}`);
+    }
+    console.log("Location sent to Telegram successfully.");
+
+    // Send photo message
+    const photoUrl = `https://api.telegram.org/bot${BOTtoken}/sendPhoto`;
+    const formData = new FormData();
+    formData.append("chat_id", CHAT_ID);
+    formData.append(
+      "caption",
+      `⚠️ Alert: Detected ${label}\n📍 Location: ${location}\n🌍 Coordinates: ${latitude}, ${longitude}]`
+    );
+    formData.append("photo", new Blob([photoBuffer], { type: "image/jpeg" }), "detected.jpg");
+
+    const photoResponse = await fetch(photoUrl, {
       method: "POST",
       body: formData,
     });
 
-    const data = await response.json() as { ok: boolean; description?: string };
-    
-    if (!data.ok) {
-      throw new Error(`Failed to send photo: ${data.description}`);
+    const photoData = await photoResponse.json();
+    if (!photoData.ok) {
+      throw new Error(`Failed to send photo: ${photoData.description}`);
     }
-
     console.log("Photo sent to Telegram successfully.");
   } catch (error) {
-    console.error("Error sending photo to Telegram:", error);
+    console.error("Error sending to Telegram:", error);
   }
 }
 
 export const router = new Hono().post("/stream", async (c) => {
   try {
-    const { image: base64Image, UID, location } = await c.req.json();
+    const { image: base64Image, UID, location, latitude, longitude } = await c.req.json();
 
     if (!base64Image) {
       return c.json({ error: "Image data not provided" }, 400);
@@ -147,6 +166,7 @@ export const router = new Hono().post("/stream", async (c) => {
     if (!image || image.width === 0 || image.height === 0) {
       return c.json({ error: "Invalid image size" }, 400);
     }
+    //await sendToTelegram(imageBuffer, 'x', location, latitude, longitude);
 
     // Perform face detection
     const detections = await faceapi
@@ -166,9 +186,9 @@ export const router = new Hono().post("/stream", async (c) => {
     for (const result of results) {
       if (result.label !== "unknown") {
         console.log(`Recognized: ${result.label}`);
-        if (result.distance < 0.45) {
+        if (result.distance < 0.5) {
           console.log("Sending photo to Telegram with label:", result.label);
-          await sendToTelegram(imageBuffer, result.label);
+          await sendToTelegram(imageBuffer, result.label, location, latitude, longitude);
         }
         return c.json({ message: "Face recognized" });
       }
